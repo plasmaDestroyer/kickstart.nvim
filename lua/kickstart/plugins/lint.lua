@@ -7,6 +7,17 @@ return {
   event = { 'BufReadPre', 'BufNewFile' },
   config = function()
     local lint = require 'lint'
+
+    local markdownlint = lint.linters['markdownlint-cli2']
+
+    lint.linters['markdownlint-cli2'] = vim.tbl_extend('force', markdownlint, {
+      args = {
+        '--config',
+        vim.fn.json_encode { config = { MD013 = false } },
+        '--',
+      },
+    })
+
     lint.linters_by_ft = {
       markdown = { 'markdownlint-cli2' },
     }

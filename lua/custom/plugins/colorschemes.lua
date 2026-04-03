@@ -83,4 +83,16 @@ return {
       }
     end,
   },
+  -- 8. Github
+  {
+    'projekt0n/github-nvim-theme',
+    lazy = false, -- Load colorscheme during startup
+    priority = 1000, -- Load before other plugins
+    config = function()
+      require('github-theme').setup {
+        -- Optional configuration
+      }
+      vim.cmd 'colorscheme github_dark_high_contrast'
+    end,
+  },
 }

@@ -11,7 +11,8 @@ return {
           comments = { italic = false },
         },
       }
-      vim.cmd.colorscheme 'tokyonight-night'
+      -- NOTE: Do not call `colorscheme` here. Only the GitHub theme below sets
+      -- the active colorscheme, otherwise two startup plugins race to set it.
     end,
   },
 
@@ -87,7 +88,7 @@ return {
   {
     'projekt0n/github-nvim-theme',
     lazy = false, -- Load colorscheme during startup
-    priority = 1000, -- Load before other plugins
+    priority = 1001, -- Highest priority: this is the one plugin that sets `colorscheme`
     config = function()
       require('github-theme').setup {
         -- Optional configuration

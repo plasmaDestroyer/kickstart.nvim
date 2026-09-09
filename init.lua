@@ -119,6 +119,11 @@ vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 -- Enable break indent
 vim.o.breakindent = true
 
+-- 4-space indent (guess-indent still overrides per-file when it detects otherwise)
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
+
 -- Enable undo/redo changes even after closing and reopening a file
 vim.o.undofile = true
 
@@ -196,6 +201,12 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- Toggle blink.cmp for this buffer. blink reads vim.b.completion natively, no plugin config needed.
+vim.keymap.set('n', '<leader>tc', function()
+  vim.b.completion = vim.b.completion == false
+  vim.notify('completion ' .. (vim.b.completion and 'on' or 'off'))
+end, { desc = '[T]oggle [C]ompletion' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -611,7 +622,7 @@ require('lazy').setup({
         gopls = {},
         pyright = {},
         rust_analyzer = {},
-        zls = {},
+        zls = { cmd = { '/home/satyxsing/.local/bin/zls' } },
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
         --    https://github.com/pmizio/typescript-tools.nvim
@@ -769,7 +780,9 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        -- super-tab: <Tab> accepts, <Up>/<Down> (and <C-n>/<C-p>) select
+        preset = 'super-tab',
+        ['<CR>'] = { 'accept', 'fallback' },
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps

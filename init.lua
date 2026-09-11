@@ -634,6 +634,13 @@ require('lazy').setup({
 
         -- Special Lua Config, as recommended by neovim help docs
         lua_ls = {
+          -- ponytail: without this the root falls back to cwd; if that is $HOME
+          -- luals refuses to load the directory. Fall back to the file's own dir.
+          root_dir = function(bufnr, on_dir)
+            local root = vim.fs.root(bufnr, { '.luarc.json', '.luarc.jsonc', 'lua', '.stylua.toml', 'stylua.toml', '.git' })
+            if root == vim.env.HOME then root = nil end
+            on_dir(root or vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
+          end,
           on_init = function(client)
             if client.workspace_folders then
               local path = client.workspace_folders[1].name

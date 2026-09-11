@@ -87,13 +87,26 @@ return {
   -- 8. Github
   {
     'projekt0n/github-nvim-theme',
-    lazy = false, -- Load colorscheme during startup
-    priority = 1001, -- Highest priority: this is the one plugin that sets `colorscheme`
+    config = function() require('github-theme').setup {} end,
+  },
+
+  -- 9. Active theme: caelestia (colors/caelestia.lua, follows the wallpaper
+  -- scheme in ~/.local/state/caelestia/scheme.json). Transparent by default so
+  -- ghostty's own blur/glass shows through.
+  {
+    dir = vim.fn.stdpath 'config', -- local spec: colors/caelestia.lua lives here
+    name = 'caelestia-colors',
+    lazy = false,
+    priority = 1001, -- highest priority: the one spec that sets `colorscheme`
     config = function()
-      require('github-theme').setup {
-        -- Optional configuration
-      }
-      vim.cmd 'colorscheme github_dark_high_contrast'
+      vim.g.caelestia_transparent = true
+      vim.cmd.colorscheme 'caelestia'
+
+      -- <leader>ub toggles the background on/off
+      vim.keymap.set('n', '<leader>ub', function()
+        vim.g.caelestia_transparent = not vim.g.caelestia_transparent
+        vim.cmd.colorscheme 'caelestia'
+      end, { desc = 'Toggle transparent [b]ackground' })
     end,
   },
 }

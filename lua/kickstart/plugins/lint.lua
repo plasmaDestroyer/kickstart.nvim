@@ -18,9 +18,10 @@ return {
       },
     })
 
-    lint.linters_by_ft = {
-      markdown = { 'markdownlint-cli2' },
-    }
+    -- ponytail: only wire up linters whose binary actually exists,
+    -- otherwise nvim-lint errors with ENOENT on every BufEnter.
+    lint.linters_by_ft = {}
+    if vim.fn.executable 'markdownlint-cli2' == 1 then lint.linters_by_ft.markdown = { 'markdownlint-cli2' } end
 
     -- To allow other plugins to add linters to require('lint').linters_by_ft,
     -- instead set linters_by_ft like this:

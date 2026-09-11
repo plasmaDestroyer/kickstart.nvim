@@ -223,6 +223,19 @@ local function apply(p, mode)
 
     -- mini.icons sets these with default = true on ColorScheme, which usually
     -- fires before it lazy loads, so set them here instead
+    -- mini.statusline: without these mini links the mode/location blocks to
+    -- Cursor, which renders as white-on-white.
+    hl("MiniStatuslineModeNormal",  { fg = p.surface, bg = p.primary, bold = true })
+    hl("MiniStatuslineModeInsert",  { fg = p.surface, bg = p.term2, bold = true })
+    hl("MiniStatuslineModeVisual",  { fg = p.surface, bg = p.term5, bold = true })
+    hl("MiniStatuslineModeReplace", { fg = p.surface, bg = p.error, bold = true })
+    hl("MiniStatuslineModeCommand", { fg = p.surface, bg = p.term3, bold = true })
+    hl("MiniStatuslineModeOther",   { fg = p.surface, bg = p.term6, bold = true })
+    hl("MiniStatuslineDevinfo",     { fg = p.onSurfaceVariant, bg = container_bg })
+    hl("MiniStatuslineFilename",    { fg = p.onSurfaceVariant, bg = container_low_bg })
+    hl("MiniStatuslineFileinfo",    { fg = p.onSurfaceVariant, bg = container_bg })
+    hl("MiniStatuslineInactive",    { fg = p.outline, bg = container_low_bg })
+
     hl("MiniIconsAzure",  { fg = p.term4 })
     hl("MiniIconsBlue",   { fg = p.term4 })
     hl("MiniIconsCyan",   { fg = p.term6 })

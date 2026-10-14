@@ -1,8 +1,9 @@
--- Colorscheme built from caelestia's scheme.json, reloaded on wallpaper change
+-- Colorscheme from the wallpaper (Serpantinum matugen writes nvim-scheme.json), reloaded on change
 
 local state_home = vim.env.XDG_STATE_HOME or ((vim.env.HOME or vim.fn.expand("~")) .. "/.local/state")
-local scheme_dir = state_home .. "/caelestia"
-local scheme_path = scheme_dir .. "/scheme.json"
+local scheme_dir = state_home .. "/serpantinum"
+local scheme_file = "nvim-scheme.json"
+local scheme_path = scheme_dir .. "/" .. scheme_file
 local uv = vim.uv or vim.loop
 
 -- blend() indexes these, so reject the scheme rather than half applying it
@@ -292,7 +293,7 @@ local function watch()
     if not handle then return end
     local ok = handle:start(scheme_dir, {}, vim.schedule_wrap(function(err, filename)
         if err then return end
-        if filename == nil or filename == "scheme.json" then trigger() end
+        if filename == nil or filename == scheme_file then trigger() end
     end))
     if not ok then
         handle:close()
@@ -301,7 +302,36 @@ local function watch()
     vim.g.caelestia_watching = true
 end
 
+-- Used until the shell has written a scheme (fresh system, other shell)
+local fallback = {
+    surface = "#101418",
+    surfaceContainer = "#1c2024",
+    surfaceContainerLow = "#181c20",
+    surfaceContainerHigh = "#272a2f",
+    surfaceContainerHighest = "#323539",
+    onSurface = "#e0e2e8",
+    onSurfaceVariant = "#c2c7cf",
+    outline = "#8c9199",
+    outlineVariant = "#42474e",
+    primary = "#9ccbfb",
+    onPrimary = "#003354",
+    primaryContainer = "#0f4a73",
+    onPrimaryContainer = "#cee5ff",
+    tertiary = "#d3bfe6",
+    onTertiary = "#392a49",
+    tertiaryContainer = "#504061",
+    onTertiaryContainer = "#efdbff",
+    error = "#ffb4ab",
+    term1 = "#ffb4ab",
+    term2 = "#9ccbfb",
+    term3 = "#d3bfe6",
+    term4 = "#b9c8da",
+    term5 = "#30628c",
+    term6 = "#d3bfe6",
+}
+
 local palette, scheme_mode = read_scheme()
+if not palette then palette, scheme_mode = fallback, "dark" end
 if palette then
     apply(palette, scheme_mode)
 else
